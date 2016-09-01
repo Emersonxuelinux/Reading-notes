@@ -1,4 +1,6 @@
 #八天深入理解Pyhton课程
+**Python版本：2.7**
+
 ##2、python基础数据类型
 
 * python中的变量不需要先定义，再使用，可以直接使用，还有重新使用用以存储不同类型的值
@@ -563,6 +565,550 @@ dict['Name':]  Manni
 ####2.13.5.字典内置函数&方法
 
 ![pythondic]	(pictures/pythondic.png)
+
+
+
+##3、字符串处理与特殊函数
+用引号括起来的字符集合称之为字符串，引号可以是一对单引号，双引号，三引号（单/双）
+
+**备注：python中三引号可以将复杂的字符串进行复制：python三引号允许一个字符跨多行，字符串中可以包含换行符、制表符以及其他特殊字符。三引号的语法是一对连续的单引号或者双引号（通常都是成对的用）**
+
+创建字符串很简单，只要为变量分配一个值即可。例如：
+
+```
+var1 = 'Hello World!'
+var2 = “Python Programming”
+var3 = '''hello chuanzhiboke'''
+var4 = """hello chuanzhiboke"""
+```
+
+但是如果需要输出	Hello "dear"怎么办呢？
+
+```
+print "hello \"dear\""	#利用\的转义字符
+print '''hello "dear"'''
+```
+
+###3.1.Python访问字符串中的值
+Python不支持单字符类型，单字符也在Python也是座位一个字符串使用
+
+Python访问子字符串，可以使用方括号来截取字符串---即分片操作
+
+```
+var1 = 'Hello World!'
+var2 = "Python Programming"
+print "var1[0]:",var1[0]
+print "var2[1:5]:",var2[1:5]
+以上实例执行结果：
+var1[0]: H
+var2[1:5]: ytho
+```
+
+###3.2.Python字符串更新
+可以对已存在的字符串进行修改，并赋值给另一个变量
+
+```
+var1 = 'Hello World'
+print "Updated mystr :-", var1[:6]+'Python'
+Updated mystr :- Hello Python
+```
+
+###3.3.Python字符串运算符
+下表实例变量a值为字符串“Hello” ，b变量值为“Python”:
+
+操作符|描述|实例
+---|---|---
++|字符串连接|a+b输出结果：HelloPython
+\*|重复输出字符串|a\*2输出结果：HelloHello
+[]|通过索引获取字符|a[1]输出结果e
+[:]|截取字符串中的一部分|a[1:4]输出结果ell
+in|成员运算符|如果字符串中包含给定的字符返回ture
+not in|成员运算符|如果字符串中不包含给定的字符返回True
+r/R|原始字符串|字符串直接按照字面的意思来使用，没有转移或不能打印的字符
+
+原始字符串除在字符串的第一个引号前加上字母“r”（可以大小写）以外，与普通字符串有着几乎完全相同的语法
+
+```
+print r'hello\n'
+```
+
+###3.4.Python字符串格式化
+```
+Python支持格式化字符串的输出
+在Python中，字符串格式化使用与C中sprintf函数一样的语法
+print "My name is %s and weight is %d kg!" % ('Zara',21)
+```
+
+###3.5.字符串各种函数
+以下start和end可以缺省参数
+
+start = 0
+end = len(mystr)
+str = 'itcast'
+
+
+```
+mystr = 'hello world itcast and itcastcppp'
+```
+
+检测str是否包含在mystr中，如果是返回开始的索引值，否则返回-1
+
+```
+mystr.find(str,0,len(mystr))
+```
+
+跟find()方法一样，只不过如果str不在mystr中会报一个异常
+
+```
+mystr.index(str,0,len(mystr))
+```
+
+返回str在start和end之间在mystr里面出现的次数
+
+```
+mystr.count(str,0,len(mystr))
+```
+
+以encoding指定的编码格式解码mystr，如果出错默认报一个ValueError的异常，除非errors指定的是'ignore'或者‘replace’
+
+```
+mystr.decode(encoding='UTF-8',errors='strict')
+```
+
+把mystr中的str1替换成str2，如果count指定，则替换不超过count次
+
+```
+mystr.replace(str1,str2,mystr.count(str1))
+```
+
+以str为分隔符切片mystr，如果maxsplit有指定值，则仅分隔maxsplit个子字符串
+
+```
+mystr.split(str=" ",2)
+```
+
+把字符串的第一个字符大写
+
+```
+mystr.capitalize()
+```
+
+返回一个原字符串居中，并使用空格填充至长度width的新字符串
+
+```
+mystr.center(width)
+```
+
+检查字符串(start,end)是否以obj结束，如果是返回True，否则返回False
+
+```
+mystr.endswith(obj,0,len(mystr))
+```
+
+检查字符串(start,end)是否以obj开头，如果是返回True，否则返回False
+
+```
+mystr.startswith(obj)
+```
+
+把字符串中的tab符号转为空格，默认的空格数tabsize是8
+
+```
+mystr.expandtabs(tabsize=8)
+```
+
+如果mystr至少有一个数字并且所有字符都是字母或数字则返回True，否则返回False
+
+```
+mystr.isalnum()
+```
+
+如果mystr至少有一个字符并且所有字符都是字母（不包含数字和空格）则返回True，否则返回False
+
+```
+mystr.isalpha()
+```
+
+如果mystr只包含数字则返回True否则返回False
+
+```
+mystr.isdigit()
+```
+
+如果mystr中包含至少一个区分大小写的字符，并且所有这些（区分大小写的）字符都是小写，则返回True，否则返回False
+
+```
+mystr.islower()
+```
+
+如果mystr中包含至少一个区分大小写的字符，并且所有这些（区分大小写的）字符都是大写，则返回True，否则返回False
+
+```
+mystr.isupper()
+```
+
+如果mystr中只包含空格，则返回True，否则返回False
+
+```
+mystr.isspace()
+```
+
+如果mystr是标题化的（见title()）则返回True，否则返回False
+
+```
+mystr.istitle()
+```
+
+转换mystr中所有大写字母为小写
+
+```
+mystr.lower()
+```
+
+转换mystr中所有小写字母为大写
+
+```
+mystr.upper()
+```
+
+mystr中每个字符后面插入str，构造出一个新的字符串
+
+```
+mystr.join(str)
+```
+
+返回一个原字符串左对齐，并使用空格填充至长度width的新字符串
+
+```
+mystr.ljust(width)
+```
+
+返回一个原字符串右对齐，并使用空格填充至长度width的新字符串
+
+```
+mystr.rjust(width)
+```
+
+截掉mystr左边的空格
+
+```
+mystr.lstrip()
+```
+
+截掉mystr字符串末尾的空格
+
+```
+mystr.rstrip()
+```
+
+类似find()函数，不过是从右边开始查找
+
+```
+mystr.rfind(str,start=0,end=len(mystr))
+```
+
+类似index(),不过是从右边开始
+
+```
+mystr.rindex(str,start=0,end=len(mystr))
+```
+
+把mystr以str分割成三部分，str前，str和str后
+
+```
+mystr.partition(str)
+```
+
+类似于partion()函数，不过是从右边开始，
+
+```
+mystr.rpartition(str)
+```
+
+按照行分隔，返回一个包含各行作为元素的列表
+
+```
+mystr.splitlines()
+```
+
+返回长度为width的字符串，原字符串mystr右对齐，前面填充0
+
+```
+mystr.zfill(width)
+```
+
+检查字符串是否包含十进制字符，这种方法只存在于unicode对象
+
+```
+mystr.isdecimal()
+```
+
+###3.6.函数高级
+
+####3.6.1.定义一个函数
+可以定义一个由自己想要功能的函数，以下是简单的规则：
+
+```
+语法
+
+def functionname( parameters ):
+	"函数_文档字符串"
+	function_suite
+	return [expression]
+默认情况下，参数值和参数名称是按函数声明中定义的顺序匹配起来的
+
+实例
+
+以下为一个简单的Python函数，它将一个字符串座位传入参数，再打印到标准显示设备
+def printme( str ):
+	"打印传入的字符串到标准显示设备上"
+	print str
+	return
+```
+
+####3.6.2.函数调用
+```
+#coding=utf-8
+# Function definition is here
+def printme( str ):
+	"打印任何传入的字符串"
+	print str;
+	return;
+# Now you can call printme function
+printme("我要调用用户自定义函数！");
+printme("再次调用同一函数");
+
+以上实例输出结果：
+我要调用用户自定义函数！
+再次调用同一函数	
+```
+
+####3.6.3.按值传递参数和按引用传递参数
+
+```
+1、按值传递，单个变量
+2、按引用传递
+如果你在函数里修改了参数，那么在调用这个函数的函数里，原始的参数也被改变了，例如：
+
+#可写函数书名
+def changeme( mylist ):
+	"修改传入的列表"
+	mylist.append([1,2,3,4]);
+	print "函数内取值：",mylist
+	return
+
+#调用changeme函数
+mylist = [10,20,30];
+changeme( mylist );
+print "函数外取值：",mylist
+传入函数的和在末尾添加新内容的对象用的是同一个引用。故输出结果如下：
+
+函数内取值： [10, 20, 30, [1, 2, 3, 4]]
+函数外取值： [10, 20, 30, [1, 2, 3, 4]]
+```
+
+####3.6.4.参数
+以下是调用函数时可使用的正式参数类型：
+
+```
+以下是调用函数时可使用的正式参数类型：
+
+必备参数
+命名参数
+缺省参数
+不定长参数
+
+必备参数
+	必备参数需以正确的顺序传入函数。调用时的数量必须和声明时的一样。
+	调用printme()函数，你必须传入一个参数，不然会出现语法错误
+	
+命名参数
+	命名参数和函数调用关系紧密，调用方用参数的命名确定传入的参数值。
+	因为Python解释器能够用参数名匹配参数值。用命名参数调用printme()函数：
+	def printme(str,name):
+		"打印任何传入的字符串"
+		print str;
+		print name;
+		return;
+	#调用printme函数
+	printme(name="test",str="My string");
+	
+缺省参数
+	调用函数时，缺省参数的值如果没有传入，则被认为是默认值。下例会打印默认的age
+	
+	#可写函数说明
+	def printinfo(name,age=35):
+		"打印任何传入的字符串"
+		print "Name:",name;
+		print "Age",age;
+		return;
+		
+	#调用printinfo函数
+	printinfo(age=50,name="miki");
+	printinfo(name="miki");
+	
+	以上实例输出结果：
+	Name: miki
+	Age 50
+	Name: miki
+	Age 35
+
+不定长参数
+	你可能需要一个函数能够处理比当初声明时更多的参数。这些参数叫做不定长参数
+	基本语法如下：
+	def functionname([formal_args,] *var_args_tuple):
+		"函数_文档字符串"
+		function_suite
+		return [expression]
+	加了星号(*)的变量名会存放所有未命名的变量参数。选择不多传参数也可，如下实例：
+	
+	#可写函数说明
+	def printinfo(arg1,*vartuple):
+		"打印任何传入的参数"
+		print "输出："
+		print arg1
+		for var in vartuple:
+			print var
+		return;
+		
+	#调用printinfo函数
+	printinfo(10);
+	printinfo(70,60,50);
+	以上实例输出结果：
+	
+	输出：
+	10
+	输出：
+	70
+	60
+	50
+```
+
+####3.6.5.匿名函数
+```
+用lambda关键词能创建小型匿名函数。这种函数得名于省略了用def声明函数的标准步骤。
+
+lambda函数的语法只包含一个语句，如下：
+
+lambda[arg1[,arg2,...argn]]:expression
+如下实例：
+#可写函数说明
+sum = lambda arg1,arg2:arg1+arg2;
+
+#调用sum函数
+print "Value of total:",sum(10,20)
+print "Value of total:",sum(20,20)
+以上实例输出结果：
+
+Value of total: 30
+Value of total: 40
+```
+
+#####3.6.6.return语句
+```
+return 语句[表达式]退出函数，选择性地像调用方返回一个表达式。
+def sum(arg1,arg2):
+	#返回两个参数的和“
+	total = arg1 + arg2
+	print "Inside the function :",total
+	return total;
+	
+#调用函数
+total = sum (10,20);
+print "Outside the function :",total
+
+以上实例输出结果:
+Inside the function : 30
+Outside the function : 30
+```
+
+####3.6.7.变量作用域
+	一个程序的所有的变量并不是在哪个位置都可以访问的。访问权限决定于这个变量是在哪里赋值的。
+
+	变量的作用域决定了在哪一部分程序你可以访问哪个特定的变量名称。两种最基本的变量作用域如下
+	
+	全局变量
+	
+	局部变量
+	
+
+##4.面向对象
+###4.1面向对象技术简介
+	类(Class):用来描述具有相同的属相和方法的对象的集合。它定义了该集合中每个对象所共有的属性和方法。对象是类的实例。
+	对象：通过类定义的数据结构实例。对象包括两个数据成员（类变量和实例变量）和方法
+	实例化：创建一个类的实例，类的具体对象。
+	
+	方法：类中定义的函数
+	数据成员：类变量或者实例变量用于处理类及其实例对象的相关的数据
+	方法重载：如果从父类继承的方法不能满足子类的需求，可以对其进行改写，这个过程叫方法的覆盖（override），重载。
+	实例变量：定义在方法中的变量，只作用于当前实例的类
+	类变量：类变量在整个实例化的对象中是公用的。类变量定义在类中且在函数体之外。类变量通常不作为实例变量使用。
+	继承：即一个派生类（derived class）继承基类（base class）的字段和方法。
+		继承也允许把一个派生类的对象座位一个基类对象对待
+		例如，有这样一个设计：一个Dog类型的对象派生自Animal类，这是模拟”是一个（is-a）“关系（例如，Dog是一个Animal）
+		
+###4.2.创建类
+	使用class语句来创建一个新类，class之后为类的名称并以冒号结束，如下实例：
+	类的属性包括成员变量和方法，其中方法的定义和普通函数的定义非常类似，但方法必须以self作为第一个参数
+	可以直接在类外通过对象名访问，如果想定义成私有的，则需在前面加2个下划线'__'
+	构造方法__init__()方法是一种特殊的方法，被称为类的构造函数或初始化方法，当创建了这个类的实例时就会调用该方法。
+	构造方法支持重载，如果用户自己没有重新定义构造方法，系统就自动执行默认的构造方法
+	析构方法__del__(self)在释放对象时调用，支持重载，可以在里面进行一些释放资源的操作，不需要显示调用
+	
+	class ClassName
+		'类的帮助信息'		#类文档字符串
+		类变量				#类体 class_suite 由类成员，方法，数据属性组成
+		def __init__(self,paramers):
+		def 函数(self,...)
+		......
+		
+	举例：
+	>>>class Employee:
+		classSpec = "it is a test class"
+		def __init__(self,name,salary):
+			self.name = name
+			self.salary=salary			
+		def hello(self):
+			print "name="+name
+			
+	在Python类中定义的方法通常有三种：实例方法，类方法以及静态方法。
+	这三者之间的区别是实例方法一般都以self作为第一个参数，必须和具体的对象实例进行绑定才能访问
+	而类方法以cls作为第一个参数，cls表示类本身，定义时使用@classmethod,那么通过cls引用的必定是类对象的属性和方法
+	
+	而静态方法不需要默认的任何参数，跟一般的普通函数类似，定义的时候使用@staticmethod
+	静态方法中不需要额外定义参数，因此在静态方法中引用类属性的话，必须通过类对象来引用
+	
+	而实例方法的第一个参数是实例对象self，那么通过self引用的可能是类属性、也有可能是实例属性（这个需要具体分析），不过在存在同名名称的类属性和实例属性的情况下，实例属性优先级更高
+	
+###4.3.创建实例对象
+	要创建一个类的实例，你可以使用类的名称，并通过__init__方法接收参数 
+	
+	”创建 Employee 类的第一个对象“
+	emp1 = Employee('Zara',2000)
+	”创建 Employee 类的第二个对象“
+	emp2 = Employee('Manni',5000)	
+	
+	
+####4.4.访问属性
+	使用点(.)来访问对象的属性，使用如下类的名称访问类变量：
+	emp1.displayEmployee()
+	
+	你可以添加，删除，修改类的属性，如下显示：
+	emp1.age = 7		#添加一个 'age' 属性
+	emp1.age = 8		#修改 ‘age’ 属性
+	del emp1.age		#删除 ‘age’ 属性
+	
+	getattr(obj,name[,default]):访问对象的属性
+	hasattr(obj,name):检查是否存在一个属性
+	setattr(obj,name,value):设置一个属性。如果属性不存在，会创建一个新属性
+	delattr(obj,name)：删除属性
+	
+
+	
+
+
+
+
 
 
 
