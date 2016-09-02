@@ -1,4 +1,7 @@
 #八天深入理解Pyhton课程
+
+**视频教程链接**：<http://edu.csdn.net/course/detail/2116> 
+
 **Python版本：2.7**
 
 ##2、python基础数据类型
@@ -1103,17 +1106,637 @@ Outside the function : 30
 	setattr(obj,name,value):设置一个属性。如果属性不存在，会创建一个新属性
 	delattr(obj,name)：删除属性
 	
+####4.5.Python内置类属性
+	__dict__:类的属性（包括一个字典，由类的数据属性组成）
+	__doc__:类的文档字符串
+	__name__:类名
+	__module__:类定义所在的模块（类的全名是'__main__classname',如果类位于一个导入模块mymod中，那么className.__modul__等于mymod）
+	__base__:类的所有父类构成元素(包含了一个由父类组成的元素)
+	
+	
+####4.6.Python对象销毁（垃圾回收）
+	在Python内部记录着使用中的对象各有多少引用
+	一个内部跟踪变量，称为一个引用计数器
+	
+	当对象呗创建时，就创建了一个引用计数，当这个对象不再需要时，也就是说，这个对象的引用计数变为0时，它被垃圾回收。但是回收不是”立即“的，由解释器在适当的时机，将垃圾对象占用的内存空间回收
+	
+####4.7.类的继承
+	面向对象的编程带来的主要好处之一是代码的重用，实现这种重用的方法之一是通过继承机制。
+	继承完全可以理解成类之间的类型和子类型关系
+	
+	继承语法：
+	class 派生类名（基类名）：//...基类名写在括号里，基本类是在类定义的时候，在元组中指明的。
+	
+	在python继承中的一些特点：
+	
+	1：在继承中基类的构造（__init__()方法）不会被自动调用，它需要在派生类的构造中亲自专门调用。
+	2：在调用基类的方法时，需要加上基类的类名前缀，且需要带上self参数变量
+		区别于在类中调用普通函数时并不需要带上self参数
+	3：Python总是首先查找对应类型的方法，如果它不能再派生类中找到对应的方法，它才开始到基类中逐个查找
+		（先在本类中查找调用的方法，找不到采取基类中找）
+	如果在继承元组中列了一个以上的类，那么它就被称作”多重继承“
+	
+	语法：
+	派生类的声明，与他们的父类类似，继承的基类列表跟在类名之后，如下所示：
+	
+	class SubClassName (ParentClass1[,ParentClass2,...]):
+		'Optional class documentation string'
+		class_suite
+		
+	实例：
+	#coding=utf-8
+	#!/usr/bin/python
+	
+	class Parent:		#定义父类
+		parentAttr = 100
+		def __init__(selt):
+			print "调用父类构造函数"
+			
+		def parentMethod(self):
+			print '调用父类方法'
+			
+		def setAttr(self,attr):
+			Parent.parentAttr = attr
+			
+		def getAttr(selt):
+			print "父类属性：",Parent.parentAttr
+	
+	class Child(Parent):	#定义子类
+		def __init__(self):
+			print "调用子类构造方法"
+			
+		def childMethod(self):
+			print '调用子类方法 child method'
+			
+	c = Child()		#实例化子类
+	c.childMethod()	#调用子类的方法
+	c.parentMethod()	#调用父类方法
+	c.setAttr(200)	#再次调用父类的方法
+	c.getAttr()		#再次调用父类的方法	
+	
+	以上代码执行结果如下：
+	调用子类构造方法
+	调用子类方法 child method
+	调用父类方法
+	父类属性： 200
+	
+	你可以继承多个类
+	
+	class A:		#定义类A
+	......
+	
+	class B:		#定义类B
+	......
+	
+	class C(A,B)	#继承类A和类B
+	......
+	
+	你可以使用issubclass()或者isinstance()方法来检测
+	
+	issubclass()	-	布尔函数，判断一个类是另一个类的子类或者子孙类，语法：issubclass(sub,sup)
+	isinstance(obj,Class) 布尔函数，如果obj是Class类的实例对象或者是Class子类的实例对象则返回true
+	方法重写
+	如果你的父类方法的功能不能满足你的需求，你可以在子类重写你父类的方法:
+	
+	实例：
+	
+	#coding=utf-8
+	#!/usr/bin/python
+	
+	class Parent:		#定义父类
+		def myMethod(self):
+			print '调用父类方法'
+			
+	class Child(Parent):	#定义子类
+		def myMethod(self):
+			print '调用子类方法'
 
+	c = Child()		#子类实例
+	c.myMethod()		#子类调用重写方法
+	
+	执行以上代码输出结果如下：
+	调用子类方法
+	
+	
+	基础重载方法
+	下表累出了一些通用的功能，你可以在自己的类重写：	
+序号|方法|描述|简单的调用方法
+---|---|---|---
+1|__init__(selt[,args...])|构造函数|obj=className(args)
+2|__del__(self)|析构函数，删除一个对象|del obj
+3|__repr__(self)|转化为供解释器读取的形式|repr(obj)
+4|__str__(self)|用于将值转化为适于人阅读的形式|str(obj)
+5|__cmp__(self,x)|对象比较|cmp(obj,x)
+
+	运算符重载
+	Python同样支持运算符重载，实例如下：
+	
+	#!/usr/bin/python
+	
+	class Vector:
+		def __init__(self,a,b):
+			self.a = a
+			self.b = b
+		def __str__(self):
+			return 'Vector (%d,%d)' % (self.a,self.b)
+		def __add__(self,other):
+			return Vector(self.a+other.a,self.b+other.b)
+			
+	v1 = Vector(2,10)
+	v2 = Vector(5,-2)
+	print v1+v2
+	
+	以上代码执行结果如下所示：
+	Vector (7,8)
+	类属性与方法
+	类的私有属性
+	
+	__private_attrs:两个下划线开头，声明该属性为私有，不能再类的外部被使用或直接访问。在类内部的方法中使用时self.__private_attr
+	
+	类的方法
+	在类的内部，使用def关键字可以为类定义一个方法，与一般函数定义不同，类方法必须包含参数self，且为第一个参数
+	
+	类的私有方法
+	__private_method:两个下划线开头，声明该方法为私有方法，不能在类的外部调用。在类的内部调用self.__private_methods
+	
+	实例
+	
+	#coding=utf-8
+	#!/usr/bin/python
+	
+	class JustCounter:
+		__secretCount = 0	#私有变量
+		publicCount = 0		#公开变量
+		
+		def count(self):
+			self.__secretCount += 1
+			self.publicCount += 1
+			print self.__secretCount
+		
+	counter = JustCounter()
+	counter.count()
+	counter.count()
+	print counter.publicCount
+	print counter.__secretCount	#报错，实例不能访问私有变量
+	
+	Python通过改变名称来包含类名：
+	
+	1
+	Traceback (most recent call last):
+	2
+	2
+	File "/Users/LJaer/PycharmProjects/learnPython/test.py", line 18, in <module>
+	print counter.__secretCount  # 报错，实例不能访问私有变量
+	AttributeError: JustCounter instance has no attribute '__secretCount'
+	
+	Python不允许实例化的类访问私有数据，但你可以通过object._className__attrName访问属性，将如下代码替换以上代码的最后一行代码
+	
+	············
+	print counter._JustCounter__secretCount
+	执行以上代码，执行结果如下：
+	
+	1
+	2
+	2
+	2
+	
+课堂例题：
+
+```Python
+#!/usr/bin/env/ python
+	
+class Student(object):
+	'''2015 new student'''
+	grade=2015
+	__school="qinghua"
+	
+	def __init__(self,subj,name,age,sex):
+		'''this is create fun'''
+		self.subj=subj
+		self.name=name
+		self.age=age
+		self.sex=sex
+		print "init student"
+	
+	def setName(self,newname):
+		self.name = newname
+		
+	def getName(self):
+		return self.name
+		
+	def showStudent(self):
+		print "subj=",self.subj
+		print "name=",self.name
+		print "age=",self.age
+		print "sex=",self.sex
+		print "grade=",Student.grade
+		print "school=",Student.__school
+		
+	@classmethod
+	def updategrade(cls,newgrade):
+		cls.grade=newgrade
+		
+	@classmethod
+	def showClass(cls):
+		print "__name__=",cls.__name__
+		print "__dict__=",cls__dict__
+		print "__class__=",cls.__class__
+
+```
+
+##5.模块
+
+	模块让你能够逻辑地组织你的Python代码段
+	把相关的代码分配到一个模块里能让你的代码更好用，更易懂
+	模块也是Python对象，具有随机的名字属性用来绑定或引用。
+	简单地说，模块就是一个保存了Python代码的文件。模块能定义函数，类和变量。模块里也能包含可执行的代码
+	举例：
+		一个叫做aname的模块里的Python代码一般都能在一个叫aname.py的文件中找到
+		
+###5.1.import语句
+	想使用Python源文件，只需要在另一个源文件里执行import语句，可以自动防止重复import
+	形如：
+		import module1,module2...
+	当解释器遇到import语句，如果模块在当前的搜索路径就会被导入
+	#导入模块
+	import support
+	#现在可以调用模块里包含的函数了
+	support.print_func("Zara")
+	
+###5.2.From...import语句
+	Python的from语句让你从模块中导入一个指定的部分到当前命名空间中。语法如下：
+	from modname import name1[,name2[,......nameN]]
+	例如，要导入模块fib的fibonacci函数，使用如下语句：
+	
+	from fib import fibonacci
+	这个声明不会把整个fib模块导入到当前的命名空间中，它只会将fib里的fibonacci单个引入到执行这个声明的模块的全局符号表
+	
+###5.3.From...import*语句
+	把一个模块的所有内容全都导入到当前的命名空间也是可以的，只需要使用如下声明：
+		
+	from modname import *
+	这提供了一个简单的方法来导入一个模块中的所有项目。然而这个声明不该被过多的使用
+	
+###5.4.定位模块
+	当你导入一个模块，Python解析器对模块位置的搜索顺序是：
+	
+	当前目录
+	如果不在当前目录，Python则搜索在shell变脸PYTHONPATH下的每个目录
+	如果都找不到，Python会查看默认路径。UNIX下。默认路径一般为/usr/local/lib/python/
+	模块搜索路径存储在system模块的sys.path变量中。变量里包含当前目录，PYTHONPATH和由安装过程决定的默认目录
+	
+###5.5.PYTHONPATH变量
+	作为环境变量，PYTHONPATH由装在一个列表里的许多目录组成。PYTHONPATH的语法和shell变量PATH的一样
+	在windwos系统，典型的PYTHONPATH如下：
+		set PYTHONPATH=c:\python20\lib
+	在UNIX系统，典型的PYTHONPATH如下：
+		set PYTHONPATH=/usr/local/lib/python
+		
+###5.6.命名空间和作用域
+	变量是拥有匹配对象的名字（标识符）
+	命名空间是一个包含了变量名称们（键）和他们各自相应的对象们（值）的字典
+	一个Python表达式可以访问局部命名空间和全局命名空间里的变量。同名隐藏的原则同C/C++
+	
+	每个函数都有自己的命名空间。类的方法的作用域规则和通常函数的一样
+	默认任何在函数内赋值的变量都是局部的
+	因此，如果要给全局变量在一个函数里赋值，必须使用global语句
+	
+	global VarName的表达式会告诉Python，VarName是一个全局变量，这样Python就不会在局部命名空间里寻找这个变量了。
+	
+	例如，我们在全局命名空间里定义一个变量money。我们再在函数内给变量money赋值，然后Python会假定money是一个局部变量
+	然而，我们并没有访问前声明一个局部变money，结果就会出现一个UnboundLocalError的错误
+	取消global语句的注释就能解决这个问题
+	
+	Money = 2000
+	def AddMoney():
+		#想改正代码就取消一下注释：
+		#global Money	
+		Money = Money +1
+		
+	print Money
+	AddMoney()
+	print Money
+	
+###5.6.dir()函数
+	dir()函数一个排好序的字符串列表，内容是一个模块里定义过的名字
+	返回的列表容纳了在一个模块里定义的所有模块，变量和函数
+	
+	import math
+	content = dir(math)
+	print content
+	
+	['__doc__', '__file__', '__name__', '__package__', 'acos', 'acosh', 'asin', 'asinh', 'atan', 'atan2', 'atanh', 'ceil', 'copysign', 'cos', 'cosh', 'degrees', 'e', 'erf', 'erfc', 'exp', 'expm1', 'fabs', 'factorial', 'floor', 'fmod', 'frexp', 'fsum', 'gamma', 'hypot', 'isinf', 'isnan', 'ldexp', 'lgamma', 'log', 'log10', 'log1p', 'modf', 'pi', 'pow', 'radians', 'sin', 'sinh', 'sqrt', 'tan', 'tanh', 'trunc']
+
+	
+###5.7.globals()和locals()函数
+	根据调用地方的不同，globals()和locals()函数可被用来返回全局和局部命名空间里的名字。
+	如果在函数内部调用locals()，返回的是所有能在该函数里访问的命名。
+	如果在函数内部调用globals()，返回的是所有能在该函数里访问的全局名字。
+	两个函数的返回类型都是字典。所以名字们能用keys()函数摘取。
+	
+###5.8.Python中的包
+	包是一个分层次的文件目录结果，它定义了一个由模块及子包，和子包下的子包等组成的Python的应用环境
+	考虑一个在Phone目录下的pots.py文件。这个文件有如下源代码：
+	#pots.py #coding=utf-8 #!/usr/bin/python
+	
+	def Pots():
+		print "I'm Pots Phone"
+		
+	同样地，我们有另外两个保存了不同函数的文件：
+	Phone/Isdn.py	含有函数
+	def Isdn():
+    	print "I'm Isdn Phone"
+	Phone/G3.py	含有函数G3（）
+	def G3():
+   		print "I'm G3 Phone"
+	
+	现在，在Phone目录下创建file init.py:
+	Phone/__init__.py
+	此文件可为空
+	from Phone.Pots import Pots
+	
+	或者当你导入Phone时，为了能够使用所有函数，你需要在__init_.py里使用显示的导入语句，如下：
+	
+	from Pots import Pots
+	from Isdn import Isdn
+	from G3 import G3
+	
+	当你把这些代码添加到init.py之后，导入Phone包的时候这些类就全都是可用的了。
+	
+	#Now import your Phone Package
+	import Phone
+	
+	Phone.Pots()
+	Phone.Isdn()
+	Phone.G3()
+	以上实例输出结果：
+	I'm Pots Phone
+	I'm Isdn Phone
+	I'm G3 Phone
+	
+如上，为了举例，我们只在每个文件里放置一个函数，但其实你可以放置许多函数
+
+你也可以在这些文件里定义Python的类，然后为这些类建一个包
+
+###5.9.模块发布
+1、mymodule目录结构体如下：
+	
+	LJaerdeMacBook-Pro:python2.7 LJaer$ mkdir mymodule
+	LJaerdeMacBook-Pro:python2.7 LJaer$ cd mymodule/
+	LJaerdeMacBook-Pro:mymodule LJaer$ touch setup.py
+	LJaerdeMacBook-Pro:mymodule LJaer$ mkdir suba subb
+	LJaerdeMacBook-Pro:mymodule LJaer$ touch suba/aa.py suba/bb.py
+	LJaerdeMacBook-Pro:mymodule LJaer$ touch subb/cc.py subb/dd.py
+	LJaerdeMacBook-Pro:mymodule LJaer$ touch suba/__init__py
+	LJaerdeMacBook-Pro:mymodule LJaer$ touch subb/__init__py
+	LJaerdeMacBook-Pro:mymodule LJaer$ tree
+	.
+	|____setup.py
+	|____suba
+	| |______init__py
+	| |____aa.py
+	| |____bb.py
+	|____subb
+	| |______init__py
+	| |____cc.py
+	| |____dd.py
+	
+2、编写setup.py,py_modules需指明所需包含的py文件
+	
+	from distutils import setup
+
+	setup(name="xwp",version="1.0",description="xwp's module",author="LJaer",py_modules=['suba.aa','suba.bb','subb.cc','subb.dd'])	
+
+
+3、构建模块
+	
+	python setup.py build
+	
+	在终端执行上述语句报错
+	LJaerdeMacBook-Pro:mymodule LJaer$ python setup.py build
+	Traceback (most recent call last):
+	  File "setup.py", line 1, in <module>
+	    from distutils import setup
+	ImportError: cannot import name setup
+	
+	将
+	from distutils import setup
+	改为
+	from setuptools import setup
+	
+	再执行
+	python setup.py build
+	
+	构建后目录结构
+	.
+	|____build
+	| |____lib
+	| | |____suba
+	| | | |____aa.py
+	| | | |____bb.py
+	| | |____subb
+	| | | |____cc.py
+	| | | |____dd.py
+	|____setup.py
+	|____suba
+	| |______init__py
+	| |____aa.py
+	| |____bb.py
+	|____subb
+	| |______init__py
+	| |____cc.py
+	| |____dd.py
+	
+4、生成发布压缩包
+	
+	python setup.py sdist 
+	
+	打包后，生成最终发布压缩包xwp-1.0.tar.gz，目录结构
+	
+	.
+	|____build
+	| |____lib
+	| | |____suba
+	| | | |____aa.py
+	| | | |____bb.py
+	| | |____subb
+	| | | |____cc.py
+	| | | |____dd.py
+	|____dist
+	| |____xwp-1.0.tar.gz
+	|____setup.py
+	|____suba
+	| |______init__py
+	| |____aa.py
+	| |____bb.py
+	|____subb
+	| |______init__py
+	| |____cc.py
+	| |____dd.py
+	|____xwp.egg-info
+	| |____dependency_links.txt
+	| |____PKG-INFO
+	| |____SOURCES.txt
+	| |____top_level.txt
+	
+5、使用压缩包
+	
+	将xwp-1.0.tar.gz拷贝到另外一个文件夹
+	
+	LJaerdeMacBook-Pro:test LJaer$ ls
+	xwp-1.0.tar.gz
+	LJaerdeMacBook-Pro:test LJaer$ tar zxvf xwp-1.0.tar.gz 
+	x xwp-1.0/
+	x xwp-1.0/PKG-INFO
+	x xwp-1.0/setup.cfg
+	x xwp-1.0/setup.py
+	x xwp-1.0/suba/
+	x xwp-1.0/suba/aa.py
+	x xwp-1.0/suba/bb.py
+	x xwp-1.0/subb/
+	x xwp-1.0/subb/cc.py
+	x xwp-1.0/subb/dd.py
+	x xwp-1.0/xwp.egg-info/
+	x xwp-1.0/xwp.egg-info/dependency_links.txt
+	x xwp-1.0/xwp.egg-info/PKG-INFO
+	x xwp-1.0/xwp.egg-info/SOURCES.txt
+	x xwp-1.0/xwp.egg-info/top_level.txt
+	LJaerdeMacBook-Pro:test LJaer$ ls
+	xwp-1.0		xwp-1.0.tar.gz
+	LJaerdeMacBook-Pro:test LJaer$ cd xwp-1.0
+	LJaerdeMacBook-Pro:xwp-1.0 LJaer$ sudo python setup.py install
+	
+	使用如下
+	import suba.aa
+	suba.aa.showaa()
+	
+	>>> import suba.aa
+	/Library/Python/2.7/site-packages/xwp-1.0-py2.7.egg/suba/__init__.py:1: UserWarning: Module suba was already imported from /Library/Python/2.7/site-packages/xwp-1.0-py2.7.egg/suba/__init__.pyc, but /Users/LJaer/Workspaces/python2.7/test/xwp-1.0 is being added to sys.path
+	>>> suba.aa.showaa()
+	show aa
+
+
+##6.文件操作
+
+###6.1.打印到屏幕
+	
+	最简单的输出方法是用print语句，你可以给他传递零个或多个用逗号隔开的表达式。或者使用占位符
+	
+###6.2.读取键盘输入
+	Python提供了两个内置函数从标准输入读入一行文本，默认的标准输入是键盘。如下：
+	raw_input() input()函数
+	
+	raw_input()函数
+	raw_input([prompt])函数从标准输入读取一个行，并返回一个字符串（去掉结尾的换行符）：
+	
+	str = raw_input("Enter your input:");
+	print "Received input is:",str
+	这将提示你输入任意字符串，然后在屏幕上显示相同的字符串。当我输入“Hello Python！”，它的输出如下：
+	
+	Enter your input:Hello Python！
+	Received input is: Hello Python！
+	
+	input函数
+	
+	input([prompt])函数和raw_input([prompt])函数基本可以互换
+	但是input会假设你的输入是一个幼小的Python表达式，并返回运算结果。
+	
+	str = input("Enter your input:");
+	print "Received input is : ",str
+	这会产生如下的对应着输入的结果：
+	
+	Enter your input:[x*5 for x in range(2,10,2)]
+	Received input is :  [10, 20, 30, 40]
+	
+###6.3.打开和关闭文件
+	你可以用file对象做大部分的文件操作
+	open函数
+		你必须先用Python内置的open()函数打开一个文件，创建一个file对象，相关的辅助方法才可以调用它进行读写。
+	file object = open(file_name[,access_mode][,buffering])
+	各个参数的细节如下：
+	file_name:file_name变量是一个包含了你要访问的文件名称的字符串值
+	access_mode:access_mode决定了打开文件的模式：只读，写入，追加等。同C
+	buffering:缓冲区的大小。（为0，就不会有寄存；为1，访问文件时会寄存行；大于1，寄存区的缓冲大小。如果取负值，寄存区的缓冲大小则为系统默认）
+	
+	mode：文件访问权限
+	r	只读
+	w	只写，如果文件不存在，则创建，如果文件存在，则截断文件
+	a	追加写
+	
+	r+	读写方法打开文件
+	w+	可读可写文件，如果文件不存在，则创建，如果文件存在，则截断文件
+	a+  追加打开文件，可读可写，如果文件不存在，则创建
+	
+###6.4.File对象的属性
+	一个文件被打开后，你有一个file对象，你可以得到有关该文件的各种信息。
+	以下是和file对象相关的所有属性的列表：
+	
+属性|列表
+---|---
+file.closed|返回true如果文件已被关闭，否则返回false
+file.mode|返回被打开文件的访问模式
+file.name|返回文件的名称
+file.softspace|如果用print输出后，必须跟一个空格符，则返回false。否则返回true
+
+###6.5.close()方法
+	File对象的close()方法刷新缓冲区里任何还没写入的信息，并关闭该文件，这之后便不能再进行写入
+	当一个文件对象的引用被重新指定给另一个文件时，Python会关闭之前的文件。用close()方法关闭文件是一个很好地习惯
+	
+	fileObject.close();
+	
+###6.6.write()方法
+	Write()方法可将任何字符串写入一个打开的文件。需要重点注意的是，Python字符串可以使二进制数据，而不是仅仅是文字。
+	Write()方法不在字符串的结尾不添加换行符('\n');
+	语法：
+	fileObject.write(string);
+	
+###6.7.read()方法
+	read()方法从一个打开的文件中读取一个字符串。需要重点注意的是，Python字符串可以使二进制数据，而不是仅仅是文字。
+	语法：
+	fileObject.read([count])
+	//返回的为读取数据的引用
+	
+	print file.read(10);
+	
+###6.8.seek()方法
+	文件位置：
+	Tell()方法告诉你文件内的当前位置，换句话说，下一次的读写会发生在文件开头这么多字节之后：
+	seek(offset[,from])方法改变当前文件的位置。Offset变量表示要移动的字节数
+	From变量指定开始移动字节的参考位置。如果from被设置为0，这意味着将文件的开头作为移动字节的参考位置。如果设置为1，则使用当前的位置作为参考位置。如果它被设为2，那么文件的末尾将作为参考位置
+	
+	#查找当前位置
+	position = fo.tell();
+	print "Current file position: ",position
+	
+	#把指针再次重新定位到文件开头
+	position = fo.seekk(0,0);
+	str = fo.read(10);
+	print "Again read String is : ",str
+	
+	#关闭打开的文件
+	fo.close()
+	
+###6.9.重命名和删除文件
+	Python的os模块提供了帮你执行文件处理操作的方法，比如重命名和删除文件。
+	要使用这个模块，你必须先导入它，然后可以调用相关的功能
+	
+	rename()方法
+	rename()方法需要两个参数，当前的文件名和新文件名。
+	语法：
+		os.rename(current_file_name,new_file_name)	
+	remove()方法
+	你可以用remove()方法删除文件，需要提供要删除的文件名作为参数
+	语法：
+		os.remove(file_name)
+
+	
 	
 
 
-
-
-
-
-
-
-
-
-
-
+	
+	
+	
+	
+	
+	
+	
