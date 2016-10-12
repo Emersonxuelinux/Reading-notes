@@ -52,7 +52,7 @@ public class shellSort {
         double d1=a.length;  
         int temp=0;  
         while(true){  
-            d1= Math.ceil(d1/2);  
+            d1= Math.ceil(d1/2);  //大于等于i的最小整数 double类型
             int d=(int) d1;  
             for(int x=0;x<d;x++){  
                 for(int i=x+d;i<a.length;i+=d){  
@@ -72,6 +72,8 @@ public class shellSort {
     }  
 }  
 ```
+
+java.lang.Math.ceil(double a) 返回最小的（最接近负无穷大）double值，大于或相等于参数，并相等于一个整数。
 
 输出结果：
 ```
