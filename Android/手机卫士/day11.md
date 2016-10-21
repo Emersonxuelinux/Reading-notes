@@ -386,22 +386,12 @@
                 }
             }
         b.注册
-            /**
-             * 锁屏的广播接受者
-             * @author Administrator
-             *
-             */
-            private class ScreenOffReceiver extends BroadcastReceiver{
-        
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    System.out.println("锁屏了.....");
-                    //清理进程
-                    killProcess();
-                    //停止更新
-                    stopUpdates();
-                }
-            }
+           //注册锁屏的广播接受者
+            screenOffReceiver = new ScreenOffReceiver();
+            //设置接受广播事件
+            IntentFilter screenoffIntentfilter = new IntentFilter();
+            screenoffIntentfilter.addAction(Intent.ACTION_SCREEN_OFF);
+            registerReceiver(screenOffReceiver, screenoffIntentfilter);
         c.注销
             if (screenOffReceiver != null) {
                 unregisterReceiver(screenOffReceiver);
