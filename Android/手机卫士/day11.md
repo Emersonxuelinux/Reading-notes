@@ -386,22 +386,12 @@
                 }
             }
         b.注册
-            /**
-             * 锁屏的广播接受者
-             * @author Administrator
-             *
-             */
-            private class ScreenOffReceiver extends BroadcastReceiver{
-        
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    System.out.println("锁屏了.....");
-                    //清理进程
-                    killProcess();
-                    //停止更新
-                    stopUpdates();
-                }
-            }
+            //注册锁屏的广播接受者
+            screenOffReceiver = new ScreenOffReceiver();
+            //设置接受广播事件
+            IntentFilter screenoffIntentfilter = new IntentFilter();
+            screenoffIntentfilter.addAction(Intent.ACTION_SCREEN_OFF);
+            registerReceiver(screenOffReceiver, screenoffIntentfilter);
         c.注销
             if (screenOffReceiver != null) {
                 unregisterReceiver(screenOffReceiver);
@@ -432,20 +422,32 @@
                     stopUpdates();
                 }
             }
-        b.注册解锁的广播接受者
+        b.代码注册解锁的广播接受者
+            /**
+             * 解锁的广播接受者
+             */
+            private class ScreenOnReceiver extends BroadcastReceiver{
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                }
+            }
+        c.注册解锁的广播接受者
             //注册解锁的广播接受者
             screenOnReceiver = new ScreenOnReceiver();
             IntentFilter screenOnIntentFilter = new IntentFilter();
             screenOnIntentFilter.addAction(Intent.ACTION_SCREEN_ON);
             registerReceiver(screenOnReceiver, screenOnIntentFilter);
-        c.解锁重新进行更新
+        d.注销
+            if (screenOnReceiver != null) {
+                unregisterReceiver(screenOnReceiver);
+                screenOnReceiver = null;
+            }
+        e.解锁重新进行更新
             /**
              * 解锁的广播接受者
              * @author Administrator
-             *
              */
             private class ScreenOnReceiver extends BroadcastReceiver{
-        
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     updateWidgets();
