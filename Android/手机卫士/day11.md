@@ -516,6 +516,17 @@
             edit.commit();
         }
     }
+    
+    设置权限
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+    
+    配置隐式意图
+     	<activity android:name=".HomeActivity">
+            <intent-filter>
+                <action android:name="top.ljaer.www.phonemanager.home"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
 <h2 id="监听用户代开应用程序">12、监听用户代开应用程序(重点)</h2>
 
@@ -553,6 +564,9 @@
                 }
             };
         }.start();
+        
+        权限
+        <uses-permission android:name="android.permission.GET_TASKS"/>
 
 <h2 id="看门狗数据库操作">13、看门狗数据库操作(重点)</h2>
 
